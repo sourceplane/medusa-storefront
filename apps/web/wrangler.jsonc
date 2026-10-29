@@ -1,0 +1,17 @@
+// The Worker @opennextjs/cloudflare builds, plus its static assets. It binds
+// nothing else: the Medusa backend is reached over HTTPS through the Store API,
+// and its URL and publishable key are build-time values `next build` inlines
+// (component.yaml, optionalSecretEnv). With neither set the storefront serves
+// its bundled sample catalogue.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "medusa-storefront-web",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+  },
+  "observability": { "enabled": true },
+}

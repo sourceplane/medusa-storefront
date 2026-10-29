@@ -1,0 +1,91 @@
+apiVersion: sourceplane.io/v1
+kind: Component
+metadata:
+  name: web
+  description: The storefront for a Medusa backend — regions, catalogue, search, cart, checkout and accounts (Next.js on Cloudflare Workers + Static Assets via @opennextjs/cloudflare, per environment; a bundled sample catalogue until a backend is connected)
+spec:
+  type: cloudflare-workers-assets-turbo
+  lifecycle: production
+  owner: platform
+  # `app`, not `web`: a domain and a component share one name space in the
+  # catalog, and a domain called `web` hid this component from it.
+  domain: app
+  path: apps/web
+  # Its own lane per environment: the Next.js build is the longest job in the
+  # plan, and a shared lane would wait on it.
+  lane: isolated
+  # No dependsOn: the storefront binds nothing but its static assets and
+  # reaches its Medusa backend over HTTPS, so there is no infra component to
+  # deploy before it.
+  #
+  # The Medusa backend and the payment keys: public values `next build`
+  # inlines into the server and the browser bundles, stored per environment as
+  # the product's secrets (README → Connecting Medusa, Payments). BEST-EFFORT
+  # references, wire-now-seed-later: a key nobody has stored yet is skipped
+  # when the job resolves its secrets (no env var, no failure), and a build
+  # without a backend URL and publishable key is the storefront on its sample
+  # catalogue with a "no backend connected" banner — so a fresh product
+  # deploys and serves before its owner has a Medusa backend at all.
+  optionalSecretEnv:
+    NEXT_PUBLIC_MEDUSA_BACKEND_URL: "secret://medusa-storefront/medusa-storefront/{{ .environment }}/MEDUSA_BACKEND_URL"
+    NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: "secret://medusa-storefront/medusa-storefront/{{ .environment }}/MEDUSA_PUBLISHABLE_KEY"
+    NEXT_PUBLIC_DEFAULT_REGION: "secret://medusa-storefront/medusa-storefront/{{ .environment }}/DEFAULT_REGION"
+    NEXT_PUBLIC_BASE_URL: "secret://medusa-storefront/medusa-storefront/{{ .environment }}/BASE_URL"
+    NEXT_PUBLIC_STRIPE_KEY: "secret://medusa-storefront/medusa-storefront/{{ .environment }}/STRIPE_PUBLISHABLE_KEY"
+    NEXT_PUBLIC_MEDUSA_PAYMENTS_PUBLISHABLE_KEY: "secret://medusa-storefront/medusa-storefront/{{ .environment }}/MEDUSA_PAYMENTS_PUBLISHABLE_KEY"
+    NEXT_PUBLIC_MEDUSA_PAYMENTS_ACCOUNT_ID: "secret://medusa-storefront/medusa-storefront/{{ .environment }}/MEDUSA_PAYMENTS_ACCOUNT_ID"
+  subscribe:
+    environments:
+      - name: dev
+        profile: verify
+      - name: stage
+        profile: verify
+        profileRules:
+          - profile: deploy
+            when:
+              triggerRef: github-push-main
+      - name: prod
+        profile: verify
+        profileRules:
+          - profile: deploy
+            when:
+              triggerRef: github-push-main
+  parameters:
+    nodeVersion: "22"
+    pnpmVersion: "10.12.1"
+
+    workspaceDir: ../..
+    appDir: .
+
+    turboFilter: "@app/web"
+    wranglerConfig: wrangler.jsonc
+
+    # @opennextjs/cloudflare emits a Worker entrypoint plus a static-assets
+    # directory bound via ASSETS — both deploy in one `wrangler deploy`.
+    workerEntrypoint: .open-next/worker.js
+    assetsDir: .open-next/assets
+
+    # Per-env worker name: medusa-storefront-web-{dev,stage,prod}.
+    workerName: medusa-storefront-web
+    environmentAwareWorkerName: true
+
+    # The account's workers.dev subdomain; exported to the smoke step as
+    # ${WORKERS_DEV_SUBDOMAIN} and used to build ${DEPLOYED_URL}.
+    workersDevSubdomain: your-workers-subdomain
+
+    installCommand: pnpm install --frozen-lockfile
+    buildCommand: pnpm exec turbo run build --filter=@app/web
+
+    # Smoke: the storefront's home page renders, and the health route — which
+    # only the Worker's server code answers (the region middleware skips
+    # /api) — reports `"ok":true`: in sample mode always, and with a backend
+    # connected only when that backend lists its regions for the publishable
+    # key the build inlined, so a wrong URL or key fails the deploy rather than
+    # the first shopper. Read-only. Each body is buffered before grep so an
+    # early match cannot SIGPIPE curl.
+    smokeCommand: 'curl -sfL -o /dev/null "${DEPLOYED_URL}/" && health=$(curl -sf "${DEPLOYED_URL}/api/health") && echo "${health}" | grep -q "\"ok\":true"'
+  labels:
+    team: platform
+    layer: delivery
+    surface: web
+    runtime: cloudflare

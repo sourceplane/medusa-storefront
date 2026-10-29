@@ -3,7 +3,7 @@ kind: Intent
 
 metadata:
   name: medusa-storefront
-  description: A commerce storefront for a Medusa backend — catalogue, cart, checkout and accounts — on Cloudflare Workers + Static Assets, live on a sample catalogue until a backend is connected
+  description: A storefront for a Medusa backend — catalogue, cart, checkout and accounts — on Cloudflare Workers + Static Assets, live on a sample catalogue until a backend is connected
   namespace: sourceplane
 
 execution:
