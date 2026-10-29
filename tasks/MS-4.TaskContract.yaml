@@ -1,0 +1,24 @@
+apiVersion: orun.io/v1
+kind: TaskContract
+metadata:
+  name: MS-4
+  title: "A baseline"
+spec:
+  goal: medusa-storefront becomes an Orun baseline that instantiates a storefront in one landing
+  affects:
+    - blueprint.yaml
+    - repo-blueprint.yaml
+    - BOOTSTRAP.md
+    - .baseline
+    - .github/workflows
+    - ai/context
+    - docs/phases
+    - hooks
+    - testing
+    - tooling
+    - apps/web
+    - tests/web
+  doneWhen:
+    - Baseline CI green: contract, blueprint, leak, placement, e2e
+    - the product a bootstrap places carries nothing of the factory
+  gates: []

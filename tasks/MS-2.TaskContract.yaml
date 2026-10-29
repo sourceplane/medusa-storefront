@@ -1,0 +1,16 @@
+apiVersion: orun.io/v1
+kind: TaskContract
+metadata:
+  name: MS-2
+  title: "The storefront on Workers"
+spec:
+  goal: The upstream storefront runs on one Cloudflare Worker with Static Assets, serving a sample catalogue until a Medusa backend is connected
+  affects:
+    - apps/web
+    - tests/web
+    - pnpm-lock.yaml
+  doneWhen:
+    - next build + opennextjs-cloudflare build are green with no backend configured
+    - the sample catalogue, cart and every route answer under wrangler dev
+    - the Worker fits Workers Free (3 MiB gzipped)
+  gates: []
