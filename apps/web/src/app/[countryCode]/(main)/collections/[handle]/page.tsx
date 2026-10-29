@@ -5,6 +5,7 @@ import { getCollectionByHandle } from "@lib/data/collections"
 import CollectionTemplate from "@modules/collections/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import { parseOptionValueIds } from "@lib/util/product-option-filters"
+import { STORE_NAME } from "@lib/util/store-name"
 
 type Props = {
   params: Promise<{ handle: string; countryCode: string }>
@@ -26,7 +27,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 
   const metadata = {
-    title: `${collection.title} | Medusa Store`,
+    title: `${collection.title} | ${STORE_NAME}`,
     description: `${collection.title} collection`,
   } as Metadata
 

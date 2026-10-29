@@ -7,8 +7,8 @@
 // (dummy) caches here every read goes to the backend and every revalidation is
 // a no-op, so a page never shows a stale cart. A store that wants Next's data
 // cache on Workers swaps in the R2 incremental cache plus the Durable Object
-// tag cache and queue (specs/epics/medusa-storefront/risks-and-open-questions.md,
-// MS-D) — a Terraform root and Durable Objects this starter does without.
+// tag cache and queue — an R2 bucket to provision and Durable Objects, which
+// this storefront does without.
 import { defineCloudflareConfig } from "@opennextjs/cloudflare/config"
 
 export default defineCloudflareConfig({})
