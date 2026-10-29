@@ -1,0 +1,16 @@
+{
+  // The storefront's own compiler settings: the tests import its source, so
+  // its files typecheck here exactly as they do in apps/web.
+  "extends": "../../apps/web/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "incremental": false,
+    "types": ["node", "next"],
+    "paths": {
+      "@lib/*": ["lib/*"],
+      "@modules/*": ["modules/*"],
+      "@app-src/*": ["./*"]
+    }
+  },
+  "include": ["src/**/*.ts"]
+}
