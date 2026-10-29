@@ -8,6 +8,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import CartButton from "@modules/layout/components/cart-button"
 import Search from "@modules/layout/components/search"
 import SideMenu from "@modules/layout/components/side-menu"
+import { STORE_NAME } from "@lib/util/store-name"
 
 export default async function Nav() {
   const [regions, locales, currentLocale] = await Promise.all([
@@ -32,7 +33,7 @@ export default async function Nav() {
               className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
               data-testid="nav-store-link"
             >
-              Medusa Store
+              {STORE_NAME}
             </LocalizedClientLink>
           </div>
 

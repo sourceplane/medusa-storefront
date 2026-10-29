@@ -18,7 +18,7 @@ export async function generateMetadata(props: {
   const [origin, regions] = await Promise.all([getSiteOrigin(), listRegions()])
 
   return {
-    title: "Medusa Next.js Starter Template",
+    title: STORE_NAME,
     description:
       "A performant frontend ecommerce starter template with Next.js 16 and Medusa.",
     alternates: {

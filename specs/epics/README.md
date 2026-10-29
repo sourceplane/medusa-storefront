@@ -7,6 +7,6 @@ folder is the adoption; the merge creates the epic in the workspace.
 
 | Epic | Cluster | Status | What it is |
 |------|---------|--------|------------|
-| [`medusa-storefront/`](./medusa-storefront/) | **MS** | In progress | Medusa's DTC starter storefront, equivalent in code and function, on Cloudflare Workers + Static Assets via OpenNext — live on a sample catalogue until a Medusa backend is connected — and an Orun baseline that instantiates it in one landing |
+| [`medusa-storefront/`](./medusa-storefront/) | **MS** | ✅ Shipped (`baseline-v1`) | Medusa's DTC starter storefront, equivalent in code and function, on Cloudflare Workers + Static Assets via OpenNext — live on a sample catalogue until a Medusa backend is connected — and an Orun baseline that instantiates it in one landing |
 
 As-built ≠ intent: what shipped lives in each epic's `IMPLEMENTATION-STATUS.md`.

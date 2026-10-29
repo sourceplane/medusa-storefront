@@ -8,7 +8,7 @@ The port keeps the storefront's pages, components, data layer, cart and checkout
 
 | Field | Value |
 |-------|-------|
-| Status | In progress |
+| Status | ✅ MS0–MS3 shipped (#1–#4), MS3 tagged `baseline-v1`. Not yet proven by a live bootstrap (risk MS-F) or against a real backend (risk MS-G) |
 | Cluster | **MS** (MS0–MS3) |
 | Owner(s) | `apps/web` (the storefront, the sample Store API) · `tests/web` |
 | Builds on | `cms-sanity`'s infra-free Workers shape (optional build-time settings as Orun secrets, a sample mode until a SaaS is connected) and `commerce`'s demo catalogue and server-action e2e |
