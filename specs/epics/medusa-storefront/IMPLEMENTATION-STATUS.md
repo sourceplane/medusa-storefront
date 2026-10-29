@@ -7,13 +7,14 @@ the code departed from `design.md` or from the upstream storefront.
 |---|---|---|
 | MS0 — the spec | ✅ Shipped | [#1](https://github.com/sourceplane/medusa-storefront/pull/1) |
 | MS1 — the storefront on Workers | ✅ Shipped | [#2](https://github.com/sourceplane/medusa-storefront/pull/2) |
-| MS2 — ready to instantiate | Not started | — |
+| MS2 — ready to instantiate | ✅ Shipped | [#3](https://github.com/sourceplane/medusa-storefront/pull/3) |
 | MS3 — a baseline | Not started | — |
 
 ## Departures from the upstream storefront
 
 `apps/web` is upstream's `apps/storefront` at the commit the port was taken
-from; these are the only changes.
+from; these are the only changes. Upstream's MIT licence (© 2022 Medusa) is
+`apps/web/LICENSE`, verbatim, and the README credits the template.
 
 ### Sample mode: the Store API answered from a bundled catalogue
 
