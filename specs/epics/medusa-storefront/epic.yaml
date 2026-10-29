@@ -1,0 +1,35 @@
+# The epic's declaration. metadata.name equals the directory name; metadata.key
+# is the task-key prefix this epic reserves (MS → MS-1, MS-2, …). Owner, target
+# date and health are the platform's — never written here.
+apiVersion: orun.io/v1
+kind: Epic
+metadata:
+  name: medusa-storefront
+  key: MS
+spec:
+  title: "Medusa's DTC starter storefront on Cloudflare Workers"
+  summary: "The storefront of Medusa's DTC starter — a Next.js 16 commerce front end for a Medusa v2 backend: regions and countries, the catalogue with collections, categories, search and product options, a cart and a multi-step checkout, customer accounts with orders and addresses, Markdown product pages and the Universal Commerce Protocol endpoints for agents — runs on Cloudflare Workers + Static Assets through @opennextjs/cloudflare inside the Cirrus baseline's repository conventions. The Medusa backend stays where it is (Medusa Cloud or any Medusa server the owner runs); the storefront reaches it over its Store API with a publishable key. Until one is connected the storefront serves a bundled sample catalogue through the same Store API surface, so a fresh deploy is live and browsable with nothing typed."
+  state: started
+  milestones:
+    - name: "MS0 — the spec"
+      exitCriteria:
+        - "intent, CI, the shared tooling, the spec index, this doc set and the task contracts are on main"
+      tasks: [MS-1]
+    - name: "MS1 — the storefront on Workers"
+      exitCriteria:
+        - "apps/web is the upstream storefront, built by `next build` + `opennextjs-cloudflare build` into one Worker with Static Assets under Workers Free's 3 MiB"
+        - "with no backend configured it serves the sample catalogue — regions, collections, categories, products, a cart — through the Store API surface the upstream data layer calls, and says how to connect a Medusa backend"
+        - "with a backend URL and a publishable key it reads that backend instead"
+        - "`pnpm typecheck`, `pnpm lint`, `pnpm test` and `pnpm build` are green; `wrangler dev` serves every route"
+      tasks: [MS-2]
+    - name: "MS2 — ready to instantiate"
+      exitCriteria:
+        - "the README says how to run, test, preview and deploy it, and how a Medusa backend, its publishable key and payments are connected"
+        - "the as-built status records every departure from the upstream storefront"
+      tasks: [MS-3]
+    - name: "MS3 — a baseline"
+      exitCriteria:
+        - "blueprint.yaml (the console card) and repo-blueprint.yaml (the build) take a new storefront from nothing to live on stage and prod in ONE landing (01-product) and a hook-only record (02-docs)"
+        - "a storefront built from it carries the storefront only, renamed throughout to its own name, repository and Worker"
+        - "Baseline CI is green: contract tests, the blueprint read by the pinned orun, the leak gate, the offline bootstrap and the end-to-end tier (the sample catalogue browsed and a product added to the cart through the storefront's own server action)"
+      tasks: [MS-4]

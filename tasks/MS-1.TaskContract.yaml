@@ -1,0 +1,21 @@
+apiVersion: orun.io/v1
+kind: TaskContract
+metadata:
+  name: MS-1
+  title: "The spec"
+spec:
+  goal: The medusa-storefront epic — declaration, doc set and task contracts — is on main, with intent, CI, the shared tooling and the spec index
+  affects:
+    - specs
+    - tasks
+    - intent.yaml
+    - .github/workflows/ci.yml
+    - tooling
+    - package.json
+    - pnpm-workspace.yaml
+    - pnpm-lock.yaml
+    - turbo.json
+  doneWhen:
+    - epic.yaml, README, design, implementation plan, risks and status are merged
+    - the four task contracts exist
+  gates: []

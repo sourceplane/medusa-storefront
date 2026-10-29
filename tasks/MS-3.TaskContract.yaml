@@ -1,0 +1,15 @@
+apiVersion: orun.io/v1
+kind: TaskContract
+metadata:
+  name: MS-3
+  title: "Ready to instantiate"
+spec:
+  goal: A reader can run, test, preview, deploy and connect it
+  affects:
+    - README.md
+    - apps/web/README.md
+    - specs/epics/medusa-storefront
+  doneWhen:
+    - the README covers running, testing, previewing, deploying and connecting a Medusa backend
+    - IMPLEMENTATION-STATUS records every departure from upstream
+  gates: []
