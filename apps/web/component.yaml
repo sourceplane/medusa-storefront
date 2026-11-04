@@ -68,18 +68,20 @@ spec:
   # storefront's own port, with its heap capped: the box is shared with the
   # agent. No Medusa backend is named (NEXT_PUBLIC_MEDUSA_BACKEND_URL and its
   # publishable key are Orun secrets the build reads), so it runs in sample
-  # mode, on its sample catalogue. The tab opens /dk, the default region's
-  # home: `/` is the middleware's rewrite to it, which `next dev` turns into a
-  # request to itself over https behind the preview (it fails).
+  # mode, on its sample catalogue. It binds `localhost`, not 127.0.0.1: the
+  # middleware rewrites `/` to the default region, and with a numeric host
+  # `next dev` gives the middleware a `localhost` URL, sees every rewrite as
+  # external and proxies it to itself (over https behind the preview, where
+  # it fails). `--dns-result-order=ipv4first` keeps `localhost` on 127.0.0.1.
   preview:
     run:
       - sh
       - -c
-      - pnpm install --frozen-lockfile --prefer-offline --filter "@app/web..." && exec node_modules/.bin/next dev -H 127.0.0.1 -p 8000
+      - pnpm install --frozen-lockfile --prefer-offline --filter "@app/web..." && exec node_modules/.bin/next dev -H localhost -p 8000
     port: 8000
-    path: /dk
+    path: /
     env:
-      NODE_OPTIONS: --max-old-space-size=1024
+      NODE_OPTIONS: --max-old-space-size=1024 --dns-result-order=ipv4first
       NEXT_TELEMETRY_DISABLED: "1"
   parameters:
     nodeVersion: "22"
