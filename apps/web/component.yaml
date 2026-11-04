@@ -58,6 +58,29 @@ spec:
           - profile: deploy
             when:
               triggerRef: github-push-main
+  # How the storefront runs itself for orun.work's live Preview tab
+  # (saas-parallel-baselining PB4): `orun preview` starts this, and a coding
+  # session keeps it running while it works, so the person watches it change
+  # as it is built. The dev server binds the box's loopback only, on a fixed
+  # port, and installs first, so a checkout the session has not installed yet
+  # still comes up.
+  # It installs only this app's packages and runs `next dev` alone, on the
+  # storefront's own port, with its heap capped: the box is shared with the
+  # agent. No Medusa backend is named (NEXT_PUBLIC_MEDUSA_BACKEND_URL and its
+  # publishable key are Orun secrets the build reads), so it runs in sample
+  # mode, on its sample catalogue. The tab opens /dk, the default region's
+  # home: `/` is the middleware's rewrite to it, which `next dev` turns into a
+  # request to itself over https behind the preview (it fails).
+  preview:
+    run:
+      - sh
+      - -c
+      - pnpm install --frozen-lockfile --prefer-offline --filter "@app/web..." && exec node_modules/.bin/next dev -H 127.0.0.1 -p 8000
+    port: 8000
+    path: /dk
+    env:
+      NODE_OPTIONS: --max-old-space-size=1024
+      NEXT_TELEMETRY_DISABLED: "1"
   parameters:
     nodeVersion: "22"
     pnpmVersion: "10.12.1"
